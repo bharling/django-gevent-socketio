@@ -1,6 +1,7 @@
 from socketio.namespace import BaseNamespace
 from socketio.sdjango import namespace
 import logging
+import datetime
 
 @namespace('/gevent_socketio_isworking')
 class GeventSocketioTestNamespace(BaseNamespace):
@@ -13,7 +14,7 @@ class GeventSocketioTestNamespace(BaseNamespace):
         self.logger.info("[{0}] {1}".format(self.socket.sessid, message))
     
     def on_echo(self, message):
-        self.emit('echo', {'message':message})
+        self.emit('echo', {'message':" - ".join([str(datetime.datetime.now()), message])})
         return True
         
         

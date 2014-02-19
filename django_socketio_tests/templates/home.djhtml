@@ -3,14 +3,34 @@
 {% block head_scripts %}
 	{% socketio_js %}
 {% endblock %}
+{% block styles %}
+	<style type="text/css">
+		.pushdown {
+			margin-top:100px;
+		}
+		
+		.padded {
+			padding:20px;
+		}
+		
+		body {
+			background:#fafafa;
+		}
+	</style>
+{% endblock %}
 {% block content %}
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6 col-sm-offset-3">
-				<div class="panel">
+				<div class="panel pushdown padded">
 					<h2>Hello</h2>
 					<p>Welcome to the django gevent socketio test page</p>
-					<button class="btn btn-info" value="Test Ye Connections" id="test-btn">Test The Ting</button>
+					<p>Click yonder button.</p>
+					<button class="btn btn-info" id="test-btn">Have a little test</button>
+					<p>&nbsp;</p>
+					<div class="result well hidden">
+						
+					</div>
 				</div>
 			</div>
 		</div>
@@ -21,7 +41,7 @@
 		var socket = io.connect('/gevent_socketio_isworking');
 		
 		socket.on('echo', function (message) {
-			console.log(message.message);
+			$('.result').text("Got from server: " + message.message).removeClass('hidden');
 		});
 		
 		$(document).ready(function(){
