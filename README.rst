@@ -6,7 +6,7 @@ A project to encapsulate the django example included in gevent-socketio into a r
 compatible with the latest version of django, and not using the bootstrap pattern, opting instead for
 the traditional django application format.
 
-Most of this code is ripped wholesale from `socket.io<http://socket.io/>`_ and `gevent-socketio<https://github.com/abourget/gevent-socketio/`_, just packaged together by me.
+Most of this code is ripped wholesale from `socket.io_ and `gevent-socketio_, just packaged together by me.
 
 
 
@@ -35,3 +35,6 @@ Thanks
 ------
 
 To the authors of socket.io and gevent-socketio
+
+_socket.io: http://socket.io/
+_gevent-socketio: https://github.com/abourget/gevent-socketio
