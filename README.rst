@@ -36,5 +36,5 @@ Thanks
 
 To the authors of socket.io and gevent-socketio
 
-_socket.io: http://socket.io/
-_gevent-socketio: https://github.com/abourget/gevent-socketio
+.. _socket.io: http://socket.io/
+.. _gevent-socketio: https://github.com/abourget/gevent-socketio
