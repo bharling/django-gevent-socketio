@@ -1,0 +1,33 @@
+{% extends 'base.djhtml' %}
+{% load gevent_socketio %}
+{% block head_scripts %}
+	{% socketio_js %}
+{% endblock %}
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<div class="panel">
+					<h2>Hello</h2>
+					<p>Welcome to the django gevent socketio test page</p>
+					<button class="btn btn-info" value="Test Ye Connections" id="test-btn">Test The Ting</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block body_scripts %}
+	<script type="text/javascript">
+		var socket = io.connect('/gevent_socketio_isworking');
+		
+		socket.on('echo', function (message) {
+			console.log(message.message);
+		});
+		
+		$(document).ready(function(){
+			$('#test-btn').on('click', function () {
+				socket.emit('echo', 'Some test message');
+			});
+		});
+	</script>
+{% endblock %}
