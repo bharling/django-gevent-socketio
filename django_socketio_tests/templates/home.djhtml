@@ -6,13 +6,13 @@
 {% block styles %}
 	<style type="text/css">
 		.pushdown {
-			margin-top:100px;
+			margin-top:20px;
 		}
 		.padded {
 			padding:20px;
 		}
 		body {
-			background:#fafafa;
+			background:#dedede;
 		}
 		
 		.mousebox {
@@ -41,36 +41,41 @@
 			position:absolute;
 			background:#666;
 		}
+		
+		.board {
+			width:620px;
+			height:620px;
+			position:relative;
+			margin:0 auto;
+			border:1px solid #dedede;
+			background:#fafafa;
+			margin-bottom:50px;
+		}
 	</style>
 {% endblock %}
 {% block content %}
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6 col-sm-offset-3">
+			<div class="col-sm-8 col-sm-offset-2">
 				<div class="panel pushdown padded">
-					<h2>Hello</h2>
-					<p>Welcome to the django gevent socketio test page</p>
-					<p>Click yonder button.</p>
-					<button class="btn btn-info" id="test-btn">Have a little test</button>
-					<p>&nbsp;</p>
-					<div class="result well hidden">
-						
-					</div>
+					<h2>Django Gevent SocketIO</h2>
+					<p>This is a simple test of server side pushing of a basic 'game state' (non-interactive at the moment).</p>
+					<p>Open some more tabs to this page, and watch more little fellows join in the dance below. Switching between tabs you should see exactly the same animation going on.</p>
+					<p>The movement of the boxes is being pushed a 30fps from the server to all clients connected to this page.</p>
+					<p>When you close another tab, it's corresponding 'player' should disappear immediately from all other clients.</p>
 				</div>
 			</div>
 		</div>
+		<div class="board panel">
+			
+		</div>
 	</div>
-	
-	<div class="mousebox">
-	</div>
-	
-	<div class="fps"></div>
 	
 {% endblock %}
 {% block body_scripts %}
 	<script type="text/javascript">
 		var socket = io.connect('/player'), players = {};
-		
+		var player_ids = [];
 		socket.on('echo', function (message) {
 			$('.result').text("Got from server: " + message.message).removeClass('hidden');
 		});
@@ -80,12 +85,21 @@
 		});
 		
 		socket.on('player_joined', function (id, colour, x, y) {
-			console.log(id, colour);
-			$(document.createElement('div')).addClass('player').attr('id', id).css({
-				background:colour,
-				top: y + 'px',
-				left: x + 'px'
-			}).appendTo('body');
+			if (player_ids.indexOf(id) < 0 ) {
+				$(document.createElement('div')).addClass('player').attr('id', id).css({
+					background:colour,
+					top: y + 'px',
+					left: x + 'px'
+				}).appendTo('.board');
+			}
+		});
+		
+		socket.on('player_left', function(id) {
+			var index = player_ids.indexOf(id);
+			if (index>-1) {
+				player_ids.splice(index, 1);
+			}
+			$('#' + id).remove();
 		});
 		
 		socket.on('update_player', function (id, x, y) {
