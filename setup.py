@@ -16,7 +16,7 @@ setup(
       url="http://github.com/bharling/django-gevent-socketio",
       author="Ben Harling",
       author_email="benjamin.harling@hotmail.com",
-      install_requires=("gevent-socketio",),
+      install_requires=("gevent", "gevent-websocket", "gevent-socketio",),
       classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',

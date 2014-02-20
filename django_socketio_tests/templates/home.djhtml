@@ -8,13 +8,38 @@
 		.pushdown {
 			margin-top:100px;
 		}
-		
 		.padded {
 			padding:20px;
 		}
-		
 		body {
 			background:#fafafa;
+		}
+		
+		.mousebox {
+			width:10px;
+			height:10px;
+			position:absolute;
+			top:0px;
+			left:0px;
+			background:#000;
+		}
+		
+		.fps {
+			position:absolute;
+			top:0px;
+			right:0px;
+			color:#fff;
+			background:#000;
+			font-size:10px;
+			padding:5px;
+		}
+		
+		.player {
+			border-radius:3px;
+			width:20px;
+			height:20px;
+			position:absolute;
+			background:#666;
 		}
 	</style>
 {% endblock %}
@@ -35,18 +60,44 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="mousebox">
+	</div>
+	
+	<div class="fps"></div>
+	
 {% endblock %}
 {% block body_scripts %}
 	<script type="text/javascript">
-		var socket = io.connect('/gevent_socketio_isworking');
+		var socket = io.connect('/player'), players = {};
 		
 		socket.on('echo', function (message) {
 			$('.result').text("Got from server: " + message.message).removeClass('hidden');
 		});
 		
+		socket.on('update', function(m) {
+			$('.fps').text('server frame: ' + m.frame);
+		});
+		
+		socket.on('player_joined', function (id, colour, x, y) {
+			console.log(id, colour);
+			$(document.createElement('div')).addClass('player').attr('id', id).css({
+				background:colour,
+				top: y + 'px',
+				left: x + 'px'
+			}).appendTo('body');
+		});
+		
+		socket.on('update_player', function (id, x, y) {
+			$('#' + id).css({
+				top: y + 'px',
+				left: x + 'px',
+			});
+		});
+		
 		$(document).ready(function(){
-			$('#test-btn').on('click', function () {
-				socket.emit('echo', 'Some test message');
+			$('#test-btn').on('click', function (e) {
+				socket.emit('echo', 'some message');
 			});
 		});
 	</script>
