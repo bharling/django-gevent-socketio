@@ -1,15 +1,12 @@
 from socketio.namespace import BaseNamespace
 from socketio.sdjango import namespace
-from socketio.mixins import BroadcastMixin, RoomsMixin
+from socketio.mixins import BroadcastMixin
 import logging
-import datetime
 import gevent
 from gevent import Greenlet
 import time
 import random
-from msilib.schema import SelfReg
-from test.pyclbr_input import Other
-import math
+from game_types import Vector2
 
 class MainloopGreenlet(Greenlet):
     def __init__(self):
@@ -54,83 +51,7 @@ def getRandomColour():
 def clamp(n, minN, maxN):
     return max(min(maxN,n), minN)
 
-class Vector2(object):
-    
-    @classmethod
-    def random(cls):
-        return cls(random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0)) * 10.0
-    
-    def __init__(self,x,y):
-        self.x=float(x)
-        self.y=float(y)
-    
-    def __add__(self,other):
-        return Vector2(self.x+other.x, self.y+other.y)
-    
-    def __iadd__(self,other):
-        self.x+=other.x
-        self.y+=other.y
-        return self
-        
-    def __sub__(self,other):
-        return Vector2(self.x-other.x, self.y-other.y)
-    
-    def __isub__(self, other):
-        self.x-=other.x
-        self.y-=other.y
-        return self
-        
-    def __mul__(self, other):
-        if hasattr(other, 'x'):
-            return Vector2(self.x*other.x, self.y*other.y)
-        else:
-            return Vector2(self.x*other, self.y*other)
-        
-    def __imul__(self, other):
-        if hasattr(other, 'x'):
-            self.x*=other.x
-            self.y*=other.y
-        else:
-            self.x *= float(other)
-            self.y *= float(other)
-        return self
-            
-    def __div__(self, other):
-        if hasattr(other, 'x'):
-            return Vector2(self.x/other.x, self.y/other.y)
-        else:
-            return Vector2(self.x/float(other), self.y/float(other))
-        
-    def __idiv__(self, other):
-        if hasattr(other, 'x'):
-            self.x/=other.x
-            self.y/=other.y
-        else:
-            self.x /= float(other)
-            self.y /= float(other)
-        return self
-            
-    def length(self):
-        return math.sqrt(self.x**2+self.y**2)
-    
-    def squaredLength(self):
-        self.x**2+self.y**2
-        
-    def copy(self):
-        return Vector2(self.x, self.y)
-        
-    def normalizedCopy(self):
-        return self.copy() / self.length()
-    
-    def normalize(self):
-        self /= self.length()
-        return self
-        
-    def dot(self, other):
-        return self.x*other.x+self.y*other.y
-        
-    def lerp(self,final,percent):
-        return self + ((final-self)*percent)
+
     
         
                 
